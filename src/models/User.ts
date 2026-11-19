@@ -31,6 +31,7 @@ export class User extends Model {
         favorites?: string[];
         recentChannels?: string[];
         videoFitMode?: string;
+        autoEnglishCaptions?: boolean;
         lastSelectedCategory?: Record<string, string>;
         lastSelectedCategoryTitle?: Record<string, string>;
         lastSelectedTvGroup?: Record<string, string>;
@@ -43,6 +44,8 @@ export class User extends Model {
         sportsLeagues?: string[];
         /** "Not interested": titles kept off this user's Home rows (content/notInterested.ts). */
         hiddenTitles?: string[];
+        /** The web app's look (its src/themes/theme.ts THEMES ids, e.g. "classic", "minimal"). */
+        theme?: string;
     };
 
     @Column(DataType.STRING)

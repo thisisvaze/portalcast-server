@@ -182,6 +182,7 @@ export const userRoutes: ServerRoute[] = [
           "favorites",
           "recentChannels",
           "videoFitMode",
+          "autoEnglishCaptions",
           "lastSelectedCategory",
           "lastSelectedCategoryTitle",
           "lastSelectedTvGroup",
@@ -191,17 +192,24 @@ export const userRoutes: ServerRoute[] = [
           "categoryOrder",
           "recentSearches",
           "sportsLeagues",
+          "theme",
         ] as const;
         const filteredPayload: Record<string, unknown> = {};
         if (payload && typeof payload === "object") {
           for (const key of ALLOWED_PREF_KEYS) {
             if (key in payload) filteredPayload[key] = payload[key];
           }
+          if (typeof filteredPayload.autoEnglishCaptions !== "boolean") delete filteredPayload.autoEnglishCaptions;
           // Only known league names, at most 20 (content/sports.ts).
           if ("sportsLeagues" in filteredPayload) {
             const clean = cleanLeagueChoice(filteredPayload.sportsLeagues);
             if (clean === null) delete filteredPayload.sportsLeagues;
             else filteredPayload.sportsLeagues = clean;
+          }
+          // The web app's theme: an id like "minimal", nothing else (the app ignores unknown ones).
+          if ("theme" in filteredPayload) {
+            const theme = filteredPayload.theme;
+            if (typeof theme !== "string" || !/^[a-z0-9-]{1,32}$/.test(theme)) delete filteredPayload.theme;
           }
         }
 
